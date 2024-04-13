@@ -1,0 +1,12 @@
+[versions]
+kotlin = "1.9.23"
+kotlinCoroutines = "1.8.0"
+kotestVersion = "5.8.1"
+
+[libraries]
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotestVersion" }
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotestVersion" }
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
