@@ -1,6 +1,6 @@
 # KCommand
 
-This is a Kotlin-based project that extends the functionality of an event bus design pattern through sealed classes. It embraces the concept of sharing information between unrelated components, objects, or processes. And offers a great deal of flexibility by means of a layer of middleware that process messages sent to a Message Bus.
+This project offers a flexible implementation of an event bus design pattern in Kotlin, with an emphasis on the integration of middleware. It supports diverse communication demands between any types of components and enables additional processing layers through middleware, enhancing the modularity and adaptability of your application.
 
 ## Installation
 
