@@ -1,29 +1,29 @@
 package io.github.theunic.kcommand.core
 
+import arrow.core.getOrElse
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KClass
 
-class DefaultMessageBus<M : Any, R : Any>(private val middlewares: List<Middleware<M, R>>) : MessageBus<M, R> {
-    private val commandEmitter = MutableSharedFlow<Pair<M, CompletableDeferred<R>>>()
-    private val commandFlow = commandEmitter.asSharedFlow()
+class DefaultMessageBus<M : Any, R : Any>(
+    private val middlewares: List<Middleware<M, R>>,
+    private val transport: Transport<M, R> = LocalTransport(),
+) : MessageBus<M, R> {
     private val subscriptions: MutableMap<KClass<out M>, suspend (M) -> R> = mutableMapOf()
 
     init {
-        commandFlow.onEach { (message, deferred) ->
-            processCommand(message, deferred)
-        }.launchIn(CoroutineScope(Dispatchers.Default))
+        transport.receive()
+            .onEach { processCommand(it.first, it.second.getOrElse { CompletableDeferred() }) }
+            .launchIn(
+                CoroutineScope(Dispatchers.Default),
+            )
     }
 
     override suspend fun handle(message: M): CompletableDeferred<R> {
-        val deferred = CompletableDeferred<R>()
-        commandEmitter.emit(message to deferred)
-        return deferred
+        return transport.send(message).getOrElse { CompletableDeferred() }
     }
 
     override fun subscribe(
