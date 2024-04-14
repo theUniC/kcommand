@@ -1,11 +1,10 @@
 plugins {
     alias(libs.plugins.kotlin)
-    id("maven-publish")
+    `maven-publish`
 }
 
 allprojects {
     apply(plugin = "kotlin")
-    apply(plugin = "maven-publish")
 
     repositories {
         mavenCentral()
@@ -21,15 +20,21 @@ allprojects {
 }
 
 subprojects {
-    publishing {
+    apply(plugin = "maven-publish")
+    configure<PublishingExtension> {
         repositories {
             maven {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/theUniC/kcommand")
                 credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
+                    username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_ACTOR")
+                    password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
                 }
+            }
+        }
+        publications {
+            register<MavenPublication>("gpr") {
+                from(components["java"])
             }
         }
     }
