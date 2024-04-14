@@ -7,7 +7,7 @@ interface MessageBus<M : Any, R> {
     suspend fun handle(message: M): CompletableDeferred<R>
 
     fun subscribe(
-        message: KClass<out M>,
+        messageType: KClass<out M>,
         messageHandler: suspend (M) -> R,
     )
 }
