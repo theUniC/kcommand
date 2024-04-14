@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KClass
 
 class DefaultMessageBus<M : Any, R : Any>(
-    private val middlewares: List<Middleware<M, R>>,
+    private val middlewares: List<Middleware<M, R>> = listOf(),
     private val transport: Transport<M, R> = LocalTransport(),
 ) : MessageBus<M, R> {
     private val subscriptions: MutableMap<KClass<out M>, suspend (M) -> R> = mutableMapOf()

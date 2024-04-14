@@ -7,8 +7,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.runTest
 
 class DefaultMessageBusTest : BehaviorSpec({
-    val middlewares = listOf<Middleware<String, Int>>()
-    val messageBus = DefaultMessageBus(middlewares)
+    val messageBus = DefaultMessageBus<String, Int>()
 
     given("A message bus with no subscriptions") {
         `when`("a message is sent to the bus") {
@@ -52,8 +51,7 @@ class DefaultMessageBusTest : BehaviorSpec({
                 }
             }
 
-        val newMiddlewares = listOf(modifyingMiddleware)
-        val newMessageBus = DefaultMessageBus(newMiddlewares)
+        val newMessageBus = DefaultMessageBus(listOf(modifyingMiddleware))
         val messageHandler = { command: String -> command }
         newMessageBus.subscribe("test", messageHandler)
 
