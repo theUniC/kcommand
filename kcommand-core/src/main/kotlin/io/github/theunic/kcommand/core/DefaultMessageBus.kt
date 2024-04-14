@@ -27,11 +27,11 @@ class DefaultMessageBus<M : Any, R : Any>(
     }
 
     override fun subscribe(
-        message: M,
+        messageType: KClass<out M>,
         messageHandler: suspend (M) -> R,
     ) {
         synchronized(subscriptions) {
-            subscriptions[message::class] = messageHandler
+            subscriptions[messageType] = messageHandler
         }
     }
 

@@ -26,7 +26,7 @@ class DefaultMessageBusTest : BehaviorSpec({
 
     given("A message bus with a subscription") {
         val messageHandler: suspend (String) -> Int = { it.length }
-        messageBus.subscribe("test", messageHandler)
+        messageBus.subscribe(String::class, messageHandler)
 
         `when`("a message sent to the message bus") {
             val message = "hello"
@@ -53,7 +53,7 @@ class DefaultMessageBusTest : BehaviorSpec({
 
         val newMessageBus = DefaultMessageBus(listOf(modifyingMiddleware))
         val messageHandler = { command: String -> command }
-        newMessageBus.subscribe("test", messageHandler)
+        newMessageBus.subscribe(String::class, messageHandler)
 
         `when`("A message goes through middleware") {
             val message = "hello"
