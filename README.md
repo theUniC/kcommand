@@ -4,7 +4,19 @@ This project offers a flexible implementation of an event bus design pattern in 
 
 ## Installation
 
-TBD
+Add this to your `build.gradle.kts`
+
+```kotlin
+dependencies {
+    implementation("io.github.theunic.kcommand:kcommand-core")
+}
+
+repositories {
+    maven {
+        url = uri("https://maven.pkg.github.com/theUniC/kcommand")
+    }
+}
+```
 
 ## Usage
 
