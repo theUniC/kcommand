@@ -19,7 +19,9 @@ jobs:
               uses: gradle/actions/setup-gradle@v3
 
             - name: Publish package
-              run: ./gradlew publishAllPublicationsToCentralPortal
+              run: |
+                ./gradlew build
+                ./gradlew publishAllPublicationsToCentralPortal
               env:
                   CENTRAL_PORTAL_USERNAME: ${{ secrets.CENTRAL_PORTAL_USERNAME }}
                   CENTRAL_PORTAL_PASSWORD: ${{ secrets.CENTRAL_PORTAL_PASSWORD }}
