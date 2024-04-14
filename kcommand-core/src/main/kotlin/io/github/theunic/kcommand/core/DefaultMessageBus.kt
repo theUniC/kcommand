@@ -12,14 +12,14 @@ class DefaultMessageBus<M : Any, R : Any>(
     private val transport: Transport<M, R> = LocalTransport(),
 ) : AbstractMessageBus<M, R>(middlewares) {
     init {
-        transport.receive()
+        transport
+            .receive()
             .onEach { processCommand(it.first, it.second.getOrElse { CompletableDeferred() }) }
-            .launchIn(
-                CoroutineScope(Dispatchers.Default),
-            )
+            .launchIn(CoroutineScope(Dispatchers.Default))
     }
 
-    override suspend fun handle(message: M): CompletableDeferred<R> {
-        return transport.send(message).getOrElse { CompletableDeferred() }
-    }
+    override suspend fun handle(message: M): CompletableDeferred<R> =
+        transport
+            .send(message)
+            .getOrElse { CompletableDeferred() }
 }
