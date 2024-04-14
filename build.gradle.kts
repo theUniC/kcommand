@@ -1,41 +1,35 @@
 plugins {
     alias(libs.plugins.kotlin)
-    `maven-publish`
+    alias(libs.plugins.nmcp)
 }
 
 allprojects {
-    apply(plugin = "kotlin")
-
     repositories {
         mavenCentral()
     }
+}
+
+subprojects {
+    apply(plugin = "kotlin")
+    apply(plugin = "com.gradleup.nmcp")
 
     kotlin {
         jvmToolchain(21)
     }
 
+    dependencies {
+        implementation(kotlin("stdlib"))
+    }
+
     tasks.withType<Test>().configureEach {
         useJUnitPlatform()
     }
-}
 
-subprojects {
-    apply(plugin = "maven-publish")
-    configure<PublishingExtension> {
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/theUniC/kcommand")
-                credentials {
-                    username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_ACTOR")
-                    password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
-                }
-            }
-        }
-        publications {
-            register<MavenPublication>("gpr") {
-                from(components["java"])
-            }
+    nmcp {
+        publishAllProjectsProbablyBreakingProjectIsolation {
+            username = System.getenv("CENTRAL_PORTAL_USERNAME")
+            password = System.getenv("CENTRAL_PORTAL_PASSWORD")
+            publicationType = "AUTOMATIC"
         }
     }
 }

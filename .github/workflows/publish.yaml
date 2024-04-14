@@ -19,6 +19,7 @@ jobs:
               uses: gradle/actions/setup-gradle@v3
 
             - name: Publish package
-              run: ./gradlew publish
+              run: ./gradlew publishAllPublicationsToCentralPortal
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  CENTRAL_PORTAL_USERNAME: ${{ secrets.CENTRAL_PORTAL_USERNAME }}
+                  CENTRAL_PORTAL_PASSWORD: ${{ secrets.CENTRAL_PORTAL_PASSWORD }}
