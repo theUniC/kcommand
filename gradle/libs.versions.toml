@@ -2,7 +2,7 @@
 kotlin = "1.9.23"
 kotlinCoroutines = "1.8.0"
 kotestVersion = "5.8.1"
-arrow = "1.2.1"
+arrow = "1.2.4"
 
 [libraries]
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
