@@ -8,7 +8,7 @@ Add this to your `build.gradle.kts`
 
 ```kotlin
 dependencies {
-    implementation("io.github.theunic.kcommand:kcommand-core")
+    implementation("io.github.theunic:kcommand-core")
 }
 ```
 
