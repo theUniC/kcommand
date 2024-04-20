@@ -10,5 +10,8 @@ dependencies {
 }
 
 nmcp {
-    publishAllPublications {}
+    publishAllPublications {
+        username = "unneeded"
+        password = "unneeded"
+    }
 }
