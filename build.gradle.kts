@@ -30,7 +30,11 @@ subprojects {
 
     mavenPublishing {
         val artifactId = project.properties["name"].toString()
+
+        publishToMavenCentral(SonatypeHost.DEFAULT)
         coordinates(rootProject.properties["groupId"].toString(), artifactId, rootProject.properties["version"].toString())
+
+        signAllPublications()
 
         pom {
             name.set(artifactId)
@@ -66,9 +70,4 @@ nmcp {
         password = System.getenv("CENTRAL_PORTAL_PASSWORD")
         publicationType = "AUTOMATIC"
     }
-}
-
-mavenPublishing {
-    publishToMavenCentral(SonatypeHost.DEFAULT)
-    signAllPublications()
 }

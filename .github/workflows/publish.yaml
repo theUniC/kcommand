@@ -29,5 +29,4 @@ jobs:
                   CENTRAL_PORTAL_USERNAME: ${{ secrets.CENTRAL_PORTAL_USERNAME }}
                   CENTRAL_PORTAL_PASSWORD: ${{ secrets.CENTRAL_PORTAL_PASSWORD }}
                   ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_INMEMORY_KEY }}
-#                  ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_INMEMORY_KEY_ID }}
                   ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_INMEMORY_KEY_PASSWORD }}
