@@ -65,7 +65,9 @@ subprojects {
 }
 
 nmcp {
-    publishAllProjectsProbablyBreakingProjectIsolation {
+    publishAggregation {
+        project(":kcommand-core")
+
         username = System.getenv("CENTRAL_PORTAL_USERNAME")
         password = System.getenv("CENTRAL_PORTAL_PASSWORD")
         publicationType = "AUTOMATIC"
