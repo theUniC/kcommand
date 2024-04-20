@@ -2,6 +2,7 @@ import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
     alias(libs.plugins.kotlin)
+    alias(libs.plugins.nmcp)
     alias(libs.plugins.vanniktech)
 }
 
@@ -56,6 +57,14 @@ subprojects {
                 developerConnection.set("scm:git:ssh://git@github.com/theUniC/kcommand.git")
             }
         }
+    }
+}
+
+nmcp {
+    publishAllProjectsProbablyBreakingProjectIsolation {
+        username = System.getenv("CENTRAL_PORTAL_USERNAME")
+        password = System.getenv("CENTRAL_PORTAL_PASSWORD")
+        publicationType = "AUTOMATIC"
     }
 }
 

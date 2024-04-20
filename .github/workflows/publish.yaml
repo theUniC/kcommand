@@ -1,5 +1,6 @@
 name: Publish
 on:
+    workflow_dispatch:
     release:
         types: [created]
 jobs:
@@ -23,10 +24,10 @@ jobs:
             - name: Publish package
               run: |
                 ./gradlew build --no-daemon
-                ./gradlew publishAndReleaseToMavenCentral --no-configuration-cache
+                ./gradlew publishAllPublicationsToCentralPortal --no-daemon
               env:
-                  ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.CENTRAL_PORTAL_USERNAME }}
-                  ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.CENTRAL_PORTAL_PASSWORD }}
+                  CENTRAL_PORTAL_USERNAME: ${{ secrets.CENTRAL_PORTAL_USERNAME }}
+                  CENTRAL_PORTAL_PASSWORD: ${{ secrets.CENTRAL_PORTAL_PASSWORD }}
                   ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_INMEMORY_KEY }}
                   ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_INMEMORY_KEY_ID }}
                   ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_INMEMORY_KEY_PASSWORD }}
