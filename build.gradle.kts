@@ -28,6 +28,14 @@ subprojects {
         useJUnitPlatform()
     }
 
+    nmcp {
+        publishAllPublications {
+            username = System.getenv("CENTRAL_PORTAL_USERNAME")
+            password = System.getenv("CENTRAL_PORTAL_PASSWORD")
+            publicationType = "AUTOMATIC"
+        }
+    }
+
     mavenPublishing {
         val artifactId = project.properties["name"].toString()
 
