@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin)
     alias(libs.plugins.nmcp)
     alias(libs.plugins.vanniktech)
+    alias(libs.plugins.dokka)
 }
 
 allprojects {
@@ -18,6 +19,7 @@ subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "com.vanniktech.maven.publish")
     apply(plugin = "com.gradleup.nmcp")
+    apply(plugin = "org.jetbrains.dokka")
 
     kotlin {
         jvmToolchain(21)
@@ -44,7 +46,7 @@ subprojects {
 
         configure(
             KotlinJvm(
-                javadocJar = JavadocJar.Empty(),
+                javadocJar = JavadocJar.Dokka("dokkaHtml"),
                 sourcesJar = true,
             ),
         )
