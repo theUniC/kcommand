@@ -15,6 +15,7 @@ allprojects {
 subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "com.vanniktech.maven.publish")
+    apply(plugin = "com.gradleup.nmcp")
 
     kotlin {
         jvmToolchain(21)
