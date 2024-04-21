@@ -3,8 +3,6 @@ kotlin = "1.9.23"
 kotlinCoroutines = "1.8.0"
 kotestVersion = "5.8.1"
 arrow = "1.2.4"
-nmcp = "0.0.7"
-vanniktech = "0.28.0"
 dokka = "1.9.20"
 
 [libraries]
@@ -15,6 +13,4 @@ arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-nmcp = { id = "com.gradleup.nmcp", version.ref = "nmcp" }
-vanniktech = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
