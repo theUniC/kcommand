@@ -5,6 +5,9 @@ plugins {
 }
 
 allprojects {
+    version = "0.1.0"
+    group = "io.github.theunic"
+
     repositories {
         mavenCentral()
     }
