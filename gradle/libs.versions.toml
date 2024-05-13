@@ -1,7 +1,7 @@
 [versions]
 kotlin = "1.9.23"
 kotlinCoroutines = "1.8.0"
-kotestVersion = "5.8.1"
+kotestVersion = "5.9.0"
 arrow = "1.2.4"
 nmcp = "0.0.7"
 vanniktech = "0.28.0"
