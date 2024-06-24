@@ -4,7 +4,7 @@ kotlinCoroutines = "1.8.0"
 kotestVersion = "5.8.1"
 arrow = "1.2.4"
 nmcp = "0.0.7"
-vanniktech = "0.28.0"
+vanniktech = "0.29.0"
 dokka = "1.9.20"
 
 [libraries]
