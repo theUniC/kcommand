@@ -8,7 +8,6 @@ plugins {
     alias(libs.plugins.vanniktech)
     alias(libs.plugins.dokka)
     `java-library`
-    id("com.vanniktech.maven.publish") version "0.30.0"
 }
 
 allprojects {
