@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.nmcp)
     alias(libs.plugins.vanniktech)
     alias(libs.plugins.dokka)
+    `java-library`
+    id("com.vanniktech.maven.publish") version "0.30.0"
 }
 
 allprojects {
@@ -51,7 +53,7 @@ subprojects {
             ),
         )
 
-        publishToMavenCentral(SonatypeHost.DEFAULT)
+        publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
         coordinates(rootProject.properties["groupId"].toString(), artifactId, rootProject.properties["version"].toString())
 
         signAllPublications()
