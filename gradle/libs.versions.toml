@@ -3,7 +3,7 @@ kotlin = "2.1.10"
 kotlinCoroutines = "1.10.0"
 kotestVersion = "5.9.1"
 arrow = "2.0.1"
-nmcp = "0.0.8"
+nmcp = "0.0.9"
 vanniktech = "0.30.0"
 dokka = "2.0.0"
 
