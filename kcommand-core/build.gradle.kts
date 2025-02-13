@@ -6,9 +6,14 @@ description =
     to the Message Bus implementations.
     """.trimIndent().replace("\n", " ")
 
+plugins {
+    alias(libs.plugins.serialization)
+}
+
 dependencies {
     implementation(libs.kotlinx.coroutines)
     implementation(libs.arrow.core)
+    implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.kotest.assertions.core)
 }

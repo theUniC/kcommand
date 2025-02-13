@@ -6,15 +6,18 @@ arrow = "2.0.1"
 nmcp = "0.0.9"
 vanniktech = "0.30.0"
 dokka = "2.0.0"
+kotlinxSerializationJson = "1.8.0"
 
 [libraries]
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotestVersion" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotestVersion" }
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 nmcp = { id = "com.gradleup.nmcp", version.ref = "nmcp" }
 vanniktech = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

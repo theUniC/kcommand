@@ -4,3 +4,4 @@ plugins {
 
 rootProject.name = "kcommand"
 include(":kcommand-core")
+include("kcommand-kafka-transport")

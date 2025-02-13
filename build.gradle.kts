@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.nmcp)
     alias(libs.plugins.vanniktech)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.serialization)
     `java-library`
 }
 
