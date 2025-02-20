@@ -38,13 +38,14 @@ class KafkaStreamsTransportTest : BehaviorSpec({
                 TestMessage.serializer()
             )
 
-            val transportConfig = KafkaStreamsTransportConfig.basic<TestMessage>(
+            val transportConfig = KafkaStreamsTransportConfig.basic<TestMessage, Topics>(
                 applicationId = "kcommand-streams-test",
                 bootstrapServers = kafka.bootstrapServers,
-                topicResolver = { _ -> "defaultTopic" }
+                inputTopics = listOf(Topics.DEFAULT),
+                topicResolver = { _ -> Topics.DEFAULT }
             )
 
-            val transport = KafkaStreamsRemoteTransport<TestMessage, Any>(
+            val transport = KafkaStreamsRemoteTransport<TestMessage, Any, Topics>(
                 config = transportConfig,
                 registry = registry,
             )

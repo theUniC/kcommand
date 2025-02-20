@@ -31,8 +31,8 @@ suspend fun KafkaProducer<String, String>.sendAwait(record: ProducerRecord<Strin
         }
     }
 
-class KafkaStreamsRemoteTransport<M : Any, R : Any>(
-    private val config: KafkaStreamsTransportConfig<M>,
+class KafkaStreamsRemoteTransport<M : Any, R : Any, TOPIC: Enum<TOPIC>>(
+    private val config: KafkaStreamsTransportConfig<M, TOPIC>,
     registry: MessageRegistry<M>,
 ) : RemoteTransport<M, R>(registry) {
 
@@ -51,17 +51,19 @@ class KafkaStreamsRemoteTransport<M : Any, R : Any>(
 
     override suspend fun doSend(kclass: KClass<out M>, serializedMessage: String) {
         val topic = config.topicResolver.invoke(kclass)
-        producer.sendAwait(ProducerRecord(topic, serializedMessage))
+        producer.sendAwait(ProducerRecord(topic.name, serializedMessage))
     }
 
     override fun doReceiveFlow(): Flow<String> = callbackFlow {
         val builder = StreamsBuilder()
 
-        val stream: KStream<String, String> = builder.stream(config.defaultTopic)
-        stream.foreach { _, value ->
-            val result = trySend(value)
-            if (result.isFailure) {
-                logger.error(result.exceptionOrNull()) {}
+        config.inputTopics.forEach { topic ->
+            val stream: KStream<String, String> = builder.stream(topic.name)
+            stream.foreach { _, value ->
+                val result = trySend(value)
+                if (result.isFailure) {
+                    logger.error(result.exceptionOrNull()) {}
+                }
             }
         }
 
