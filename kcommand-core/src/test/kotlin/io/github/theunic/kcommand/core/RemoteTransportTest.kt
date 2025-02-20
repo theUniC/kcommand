@@ -10,6 +10,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.serialization.json.Json
+import kotlin.reflect.KClass
 
 class DummyRemoteTransport<M : Any, R : Any>(
     registry: MessageRegistry<M>,
@@ -19,7 +20,7 @@ class DummyRemoteTransport<M : Any, R : Any>(
     val sentMessages = mutableListOf<String>()
     private val incomingFlow = MutableSharedFlow<String>()
 
-    override fun doSend(serializedMessage: String) {
+    override suspend fun doSend(kclass: KClass<out M>, serializedMessage: String) {
         sentMessages.add(serializedMessage)
     }
 

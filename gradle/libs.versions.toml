@@ -7,6 +7,9 @@ nmcp = "0.0.9"
 vanniktech = "0.30.0"
 dokka = "2.0.0"
 kotlinxSerializationJson = "1.8.0"
+kafkaStreams = "3.7.2"
+kotestTestcontainers = "2.0.2"
+kotlinLogging = "7.0.4"
 
 [libraries]
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
@@ -14,6 +17,9 @@ kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref 
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotestVersion" }
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+kafka-streams = { module = "org.apache.kafka:kafka-streams", version.ref = "kafkaStreams" }
+kotest-testcontainers = { module = "io.kotest.extensions:kotest-extensions-testcontainers", version.ref = "kotestTestcontainers" }
+kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlinLogging" }
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
