@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.KSerializer
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.filterNotNull
+import kotlin.reflect.KClass
 
 abstract class RemoteTransport<M: Any, R: Any>(
     private val registry: MessageRegistry<M>,
@@ -16,7 +17,7 @@ abstract class RemoteTransport<M: Any, R: Any>(
         prettyPrint = false
     }
 ): Transport<M, R> {
-    protected abstract fun doSend(serializedMessage: String)
+    protected abstract suspend fun doSend(kclass: KClass<out M>, serializedMessage: String)
     protected abstract fun doReceiveFlow(): Flow<String>
 
     override suspend fun send(message: M): Either<Unit, CompletableDeferred<R>> {
@@ -29,7 +30,7 @@ abstract class RemoteTransport<M: Any, R: Any>(
         val envelope = Envelope(typeName, payloadJson)
         val envelopeJson = json.encodeToString(Envelope.serializer(), envelope)
 
-        doSend(envelopeJson)
+        doSend(kclass, envelopeJson)
 
         // Fire-and-forget
         return Either.Left(Unit)
