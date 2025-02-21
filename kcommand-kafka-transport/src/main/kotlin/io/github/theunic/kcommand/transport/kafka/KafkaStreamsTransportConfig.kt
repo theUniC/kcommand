@@ -33,10 +33,8 @@ data class KafkaStreamsTransportConfig<M : Any, TOPIC : Enum<TOPIC>>(
                     put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.StringSerde::class.java.name)
                 }
 
-            val finalProps = propertiesModifier.invoke(props)
-
             return KafkaStreamsTransportConfig(
-                streamsProperties = finalProps,
+                streamsProperties = propertiesModifier.invoke(props),
                 topicResolver = topicResolver,
                 inputTopics = inputTopics,
             )
