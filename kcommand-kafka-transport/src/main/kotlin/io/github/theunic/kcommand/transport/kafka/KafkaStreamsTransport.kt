@@ -32,17 +32,18 @@ suspend fun KafkaProducer<String, String>.sendAwait(record: ProducerRecord<Strin
         }
     }
 
-class KafkaStreamsRemoteTransport<M : Any, R : Any, TOPIC: Enum<TOPIC>>(
+class KafkaStreamsRemoteTransport<M : Any, R : Any, TOPIC : Enum<TOPIC>>(
     private val config: KafkaStreamsTransportConfig<M, TOPIC>,
     registry: MessageRegistry<M>,
-) : RemoteTransport<M, R>(registry), Stopable {
-
+) : RemoteTransport<M, R>(registry),
+    Stopable {
     private val producer: KafkaProducer<String, String> by lazy {
-        val props = Properties().apply {
-            putAll(config.streamsProperties)
-            put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer")
-            put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer")
-        }
+        val props =
+            Properties().apply {
+                putAll(config.streamsProperties)
+                put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer")
+                put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer")
+            }
         KafkaProducer<String, String>(props)
     }
 
@@ -50,33 +51,37 @@ class KafkaStreamsRemoteTransport<M : Any, R : Any, TOPIC: Enum<TOPIC>>(
 
     private lateinit var streams: KafkaStreams
 
-    override suspend fun doSend(kclass: KClass<out M>, serializedMessage: String) {
+    override suspend fun doSend(
+        kclass: KClass<out M>,
+        serializedMessage: String,
+    ) {
         val topic = config.topicResolver.invoke(kclass)
         producer.sendAwait(ProducerRecord(topic.name, serializedMessage))
     }
 
-    override fun doReceiveFlow(): Flow<String> = callbackFlow {
-        val builder = StreamsBuilder()
+    override fun doReceiveFlow(): Flow<String> =
+        callbackFlow {
+            val builder = StreamsBuilder()
 
-        config.inputTopics.forEach { topic ->
-            val stream: KStream<String, String> = builder.stream(topic.name)
-            stream.foreach { _, value ->
-                val result = trySend(value)
-                if (result.isFailure) {
-                    logger.error(result.exceptionOrNull()) {}
+            config.inputTopics.forEach { topic ->
+                val stream: KStream<String, String> = builder.stream(topic.name)
+                stream.foreach { _, value ->
+                    val result = trySend(value)
+                    if (result.isFailure) {
+                        logger.error(result.exceptionOrNull()) {}
+                    }
                 }
             }
-        }
 
-        val topology = builder.build()
-        streams = KafkaStreams(topology, config.streamsProperties)
-        streams.start()
+            val topology = builder.build()
+            streams = KafkaStreams(topology, config.streamsProperties)
+            streams.start()
 
-        awaitClose {
-            streams.close()
-            producer.close()
+            awaitClose {
+                streams.close()
+                producer.close()
+            }
         }
-    }
 
     override fun stop() {
         streams.close(Duration.ofSeconds(1))

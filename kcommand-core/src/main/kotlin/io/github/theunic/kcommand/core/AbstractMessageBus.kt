@@ -39,9 +39,7 @@ abstract class AbstractMessageBus<M : Any, R : Any>(
         chain(command)
     }
 
-    private suspend fun handleCommand(command: M): R {
-        return getCommandHandler(command::class)(command)
-    }
+    private suspend fun handleCommand(command: M): R = getCommandHandler(command::class)(command)
 
     private fun getCommandHandler(commandClass: KClass<out M>): suspend (M) -> R {
         synchronized(subscriptions) {

@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.onEach
 class DefaultMessageBus<M : Any, R : Any>(
     middlewares: List<Middleware<M, R>> = listOf(),
     private val transport: AggregatorTransport<M, R> = AggregatorTransport(),
-) : AbstractMessageBus<M, R>(middlewares), Stopable {
+) : AbstractMessageBus<M, R>(middlewares),
+    Stopable {
     init {
         transport
             .receive()
