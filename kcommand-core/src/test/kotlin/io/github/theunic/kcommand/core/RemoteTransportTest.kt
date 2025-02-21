@@ -1,5 +1,6 @@
 package io.github.theunic.kcommand.core
 
+import io.github.theunic.kcommand.core.transport.RemoteTransport
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.delay

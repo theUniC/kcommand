@@ -1,6 +1,7 @@
-package io.github.theunic.kcommand.core
+package io.github.theunic.kcommand.core.transport
 
 import arrow.core.Either
+import io.github.theunic.kcommand.core.Transport
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow

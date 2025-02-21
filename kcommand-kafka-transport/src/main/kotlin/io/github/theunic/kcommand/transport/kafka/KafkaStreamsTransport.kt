@@ -2,7 +2,8 @@ package io.github.theunic.kcommand.transport.kafka
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.theunic.kcommand.core.MessageRegistry
-import io.github.theunic.kcommand.core.RemoteTransport
+import io.github.theunic.kcommand.core.Stopable
+import io.github.theunic.kcommand.core.transport.RemoteTransport
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -34,7 +35,7 @@ suspend fun KafkaProducer<String, String>.sendAwait(record: ProducerRecord<Strin
 class KafkaStreamsRemoteTransport<M : Any, R : Any, TOPIC: Enum<TOPIC>>(
     private val config: KafkaStreamsTransportConfig<M, TOPIC>,
     registry: MessageRegistry<M>,
-) : RemoteTransport<M, R>(registry) {
+) : RemoteTransport<M, R>(registry), Stopable {
 
     private val producer: KafkaProducer<String, String> by lazy {
         val props = Properties().apply {
@@ -77,7 +78,7 @@ class KafkaStreamsRemoteTransport<M : Any, R : Any, TOPIC: Enum<TOPIC>>(
         }
     }
 
-    fun stop() {
+    override fun stop() {
         streams.close(Duration.ofSeconds(1))
         producer.close()
     }

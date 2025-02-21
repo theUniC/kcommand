@@ -1,6 +1,7 @@
 package io.github.theunic.kcommand.core
 
 import arrow.core.getOrElse
+import io.github.theunic.kcommand.core.transport.AggregatorTransport
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -9,8 +10,8 @@ import kotlinx.coroutines.flow.onEach
 
 class DefaultMessageBus<M : Any, R : Any>(
     middlewares: List<Middleware<M, R>> = listOf(),
-    private val transport: Transport<M, R> = LocalTransport(),
-) : AbstractMessageBus<M, R>(middlewares) {
+    private val transport: AggregatorTransport<M, R> = AggregatorTransport(),
+) : AbstractMessageBus<M, R>(middlewares), Stopable {
     init {
         transport
             .receive()
@@ -22,4 +23,8 @@ class DefaultMessageBus<M : Any, R : Any>(
         transport
             .send(message)
             .getOrElse { CompletableDeferred() }
+
+    override fun stop() {
+        transport.stop()
+    }
 }
