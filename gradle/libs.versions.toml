@@ -7,7 +7,7 @@ nmcp = "0.0.9"
 vanniktech = "0.30.0"
 dokka = "2.0.0"
 kotlinxSerializationJson = "1.8.0"
-kafkaStreams = "3.7.2"
+kafkaStreams = "3.9.0"
 kotestTestcontainers = "2.0.2"
 kotlinLogging = "7.0.4"
 
