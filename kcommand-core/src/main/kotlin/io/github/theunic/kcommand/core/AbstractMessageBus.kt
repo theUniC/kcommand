@@ -6,11 +6,11 @@ import kotlin.reflect.KClass
 abstract class AbstractMessageBus<M : Any, R : Any>(
     private val middlewares: List<Middleware<M, R>> = listOf(),
 ) : MessageBus<M, R> {
-    private val subscriptions: MutableMap<KClass<out M>, suspend (M) -> R> = mutableMapOf()
+    private val subscriptions: MutableMap<KClass<out M>, MessageHandler<M, R>> = mutableMapOf()
 
     override fun subscribe(
         messageType: KClass<out M>,
-        messageHandler: suspend (M) -> R,
+        messageHandler: MessageHandler<M, R>,
     ) {
         synchronized(subscriptions) {
             subscriptions[messageType] = messageHandler
@@ -39,9 +39,9 @@ abstract class AbstractMessageBus<M : Any, R : Any>(
         chain(command)
     }
 
-    private suspend fun handleCommand(command: M): R = getCommandHandler(command::class)(command)
+    private suspend fun handleCommand(command: M): R = getCommandHandler(command::class).handle(command)
 
-    private fun getCommandHandler(commandClass: KClass<out M>): suspend (M) -> R {
+    private fun getCommandHandler(commandClass: KClass<out M>): MessageHandler<M, R> {
         synchronized(subscriptions) {
             return subscriptions[commandClass]
                 ?: throw IllegalArgumentException("No handler found for command: $commandClass")

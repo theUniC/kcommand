@@ -26,7 +26,10 @@ class DefaultMessageBusTest :
         }
 
         given("A message bus with a subscription") {
-            val messageHandler: suspend (String) -> Int = { it.length }
+            val messageHandler =
+                object : MessageHandler<String, Int> {
+                    override suspend fun handle(message: String) = message.length
+                }
             messageBus.subscribe(String::class, messageHandler)
 
             `when`("a message sent to the message bus") {
@@ -51,7 +54,10 @@ class DefaultMessageBusTest :
                 }
 
             val newMessageBus = DefaultMessageBus(listOf(modifyingMiddleware))
-            val messageHandler = { command: String -> command }
+            val messageHandler =
+                object : MessageHandler<String, String> {
+                    override suspend fun handle(message: String) = message
+                }
             newMessageBus.subscribe(String::class, messageHandler)
 
             `when`("A message goes through middleware") {

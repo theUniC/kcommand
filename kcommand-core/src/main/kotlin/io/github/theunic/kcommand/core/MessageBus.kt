@@ -8,6 +8,6 @@ interface MessageBus<M : Any, R> {
 
     fun subscribe(
         messageType: KClass<out M>,
-        messageHandler: suspend (M) -> R,
+        messageHandler: MessageHandler<M, R>,
     )
 }
