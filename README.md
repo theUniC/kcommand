@@ -18,10 +18,17 @@ dependencies {
 
 ```kotlin
 import io.github.theunic.kcommand.core.SimpleMessageBus
+import io.github.theunic.kcommand.core.MessageHandler
+
+class ToUpperMessageHandler : MessageHandler<String, String> {
+    suspend fun handle(message: String): String {
+        return message.uppercase()
+    }
+}
 
 fun main() {
     val messageBus = SimpleMessageBus<String, String>()
-    messageBus.subscribe(String::class) { it.uppercase() }
+    messageBus.subscribe(String::class, ToUpperMessageHandler())
     val result = messageBus.handle("hello world!")
     println(result.await()) // => "HELLO WORLD!"
 }
@@ -33,11 +40,18 @@ The `DefaultMessageBus` makes use of corroutines, suspended functions and Kotlin
 
 ```kotlin
 import io.github.theunic.kcommand.core.DefaultMessageBus
+import io.github.theunic.kcommand.core.MessageHandler
 import kotlinx.coroutines.runBlocking
+
+class StringLenghtMessageHandler : MessageHandler<String, Int> {
+    suspend fun handle(message: String): Int {
+        return message.length
+    }
+}
 
 fun main() {
     val messageBus = DefaultMessageBus<String, Int>()
-    messageBus.subscribe(String::class) { it.length }
+    messageBus.subscribe(String::class, StringLenghtMessageHandler())
     runBlocking {
         val result = messageBus.handle("hello world!")
         println(result.await()) // => 12
@@ -170,7 +184,6 @@ dependencies {
 val kafkaConfig = KafkaTransportConfig(
     applicationId = "my-kafka-streams-app",
     bootstrapServers = "localhost:9092",
-    // other settings if needed
 )
 
 val kafkaTransport = KafkaStreamsRemoteTransport<String, Int>(
@@ -194,6 +207,23 @@ runBlocking {
 
 // Meanwhile, KafkaStreamsRemoteTransport will consume messages from the configured topics
 // and re-inject them into the bus, if you collect the flow or run it in parallel.
+```
+
+In case you need to customize the Kafka connection, you can pass an additional lambda to the config class
+
+```kotlin
+val kafkaConfig = KafkaTransportConfig(
+    applicationId = "my-kafka-streams-app",
+    bootstrapServers = "localhost:9092",
+) { Properties().apply {
+        put("security.protocol", "SSL")
+        put("ssl.truststore.location", "/path/to/truststore.jks")
+        put("ssl.truststore.password", "truststorePassword")
+        put("ssl.keystore.location", "/path/to/keystore.jks")
+        put("ssl.keystore.password", "keystorePassword")
+        put("ssl.key.password", "keyPassword")
+    }
+}
 ```
 
 ## Contributing

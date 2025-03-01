@@ -22,7 +22,7 @@ data class KafkaStreamsTransportConfig<M : Any, TOPIC : Enum<TOPIC>>(
             bootstrapServers: String,
             inputTopics: List<TOPIC>,
             topicResolver: (KClass<out M>) -> TOPIC,
-            propertiesModifier: (Properties) -> Properties = { it },
+            propertiesModifier: () -> Properties = { Properties() },
         ): KafkaStreamsTransportConfig<M, TOPIC> {
             val props =
                 Properties().apply {
@@ -33,8 +33,10 @@ data class KafkaStreamsTransportConfig<M : Any, TOPIC : Enum<TOPIC>>(
                     put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.StringSerde::class.java.name)
                 }
 
+            props.putAll(propertiesModifier.invoke())
+
             return KafkaStreamsTransportConfig(
-                streamsProperties = propertiesModifier.invoke(props),
+                streamsProperties = props,
                 topicResolver = topicResolver,
                 inputTopics = inputTopics,
             )
