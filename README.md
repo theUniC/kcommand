@@ -226,6 +226,55 @@ val kafkaConfig = KafkaTransportConfig(
 }
 ```
 
+## MessageRegistry & Message Serialization
+
+The **MessageRegistry** is a core component of KCommand that provides a centralized mechanism for registering message types along with their corresponding serializers. This allows the system to automatically handle the (de)serialization of messages across different transports without requiring manual conversion for each message type.
+
+### Key Features
+
+- **Type Safety:** By registering each message type (typically using Kotlinx.serialization), you ensure that only known and supported message types are processed.
+- **Polymorphic Serialization:** When using sealed classes or polymorphic hierarchies, the MessageRegistry enables correct serialization/deserialization by associating a unique identifier (or type name) with each subtype.
+- **Centralized Configuration:** Instead of scattering serialization logic across your application, the MessageRegistry consolidates it, making it easier to update or extend the supported message types.
+
+### How It Works
+
+1. **Register Message Types:** The user defines and registers each message type with a unique identifier and its corresponding serializer.
+2. **Lookup at Runtime:** When a message is sent or received, the registry is used to look up the correct serializer based on the message’s type.
+3. **Integration with Transports:** Transports use the registry to convert messages to/from their serialized (typically JSON) form before sending to or after receiving from remote systems.
+
+### Example
+
+Below is an example of how to define a sealed class for messages and register its subtypes in the MessageRegistry:
+
+```kotlin
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import io.github.theunic.kcommand.core.MessageRegistry
+
+@Serializable
+sealed class MyMessage {
+    @Serializable
+    data class TextMessage(val text: String) : MyMessage()
+
+    @Serializable
+    data class ImageMessage(val url: String) : MyMessage()
+}
+
+// Create a MessageRegistry instance for MyMessage types
+val registry = MessageRegistry<MyMessage>().apply {
+    // Register each subtype with a unique type identifier and its serializer.
+    register(MyMessage.TextMessage::class, "text", MyMessage.TextMessage.serializer())
+    register(MyMessage.ImageMessage::class, "image", MyMessage.ImageMessage.serializer())
+}
+
+// Example: Serializing a message using the registry
+val json = Json { encodeDefaults = true }
+val textMsg = MyMessage.TextMessage("Hello, KCommand!")
+val (typeName, serializer) = registry.getTypeNameAndSerializer(textMsg::class)!!
+val payload = json.encodeToString(serializer, textMsg)
+println("Type: $typeName, Serialized Payload: $payload")
+```
+
 ## Contributing
 
 Contributions of all sizes are welcome.
