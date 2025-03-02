@@ -18,12 +18,12 @@ abstract class AbstractMessageBus<M : Any, R : Any>(
     }
 
     protected suspend fun processCommand(
-        command: M,
+        message: M,
         deferred: CompletableDeferred<R>,
     ) {
         val next: suspend (M) -> CompletableDeferred<R> = { cmd ->
             try {
-                deferred.complete(handleCommand(cmd))
+                deferred.complete(handleMessage(cmd))
                 deferred
             } catch (e: Exception) {
                 deferred.completeExceptionally(e)
@@ -36,15 +36,15 @@ abstract class AbstractMessageBus<M : Any, R : Any>(
                 { cmd -> middleware.handle(cmd, proceed) }
             }
 
-        chain(command)
+        chain(message)
     }
 
-    private suspend fun handleCommand(command: M): R = getCommandHandler(command::class).handle(command)
+    private suspend fun handleMessage(message: M): R = getMessageHandler(message::class).handle(message)
 
-    private fun getCommandHandler(commandClass: KClass<out M>): MessageHandler<M, R> {
+    private fun getMessageHandler(messageClass: KClass<out M>): MessageHandler<M, R> {
         synchronized(subscriptions) {
-            return subscriptions[commandClass]
-                ?: throw IllegalArgumentException("No handler found for command: $commandClass")
+            return subscriptions[messageClass]
+                ?: throw IllegalArgumentException("No handler found for message: $messageClass")
         }
     }
 }
