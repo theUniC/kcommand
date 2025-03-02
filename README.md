@@ -263,16 +263,20 @@ sealed class MyMessage {
 // Create a MessageRegistry instance for MyMessage types
 val registry = MessageRegistry<MyMessage>().apply {
     // Register each subtype with a unique type identifier and its serializer.
-    register(MyMessage.TextMessage::class, "text", MyMessage.TextMessage.serializer())
-    register(MyMessage.ImageMessage::class, "image", MyMessage.ImageMessage.serializer())
+    register(MyMessage.TextMessage::class, MyMessage.TextMessage.serializer())
+    register(MyMessage.ImageMessage::class, MyMessage.ImageMessage.serializer())
 }
 
-// Example: Serializing a message using the registry
-val json = Json { encodeDefaults = true }
-val textMsg = MyMessage.TextMessage("Hello, KCommand!")
-val (typeName, serializer) = registry.getTypeNameAndSerializer(textMsg::class)!!
-val payload = json.encodeToString(serializer, textMsg)
-println("Type: $typeName, Serialized Payload: $payload")
+// Example usage in the Kafka Streams transport
+val kafkaConfig = KafkaTransportConfig(
+    applicationId = "my-kafka-app",
+    bootstrapServers = "localhost:9092"
+)
+
+val kafkaTransport = KafkaStreamsRemoteTransport<MyMessage, Any>(
+    config = kafkaConfig,
+    registry = registry,
+)
 ```
 
 ## Contributing
