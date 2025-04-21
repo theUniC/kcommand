@@ -9,7 +9,7 @@ dokka = "2.0.0"
 kotlinxSerializationJson = "1.8.0"
 kafkaStreams = "3.9.0"
 kotestTestcontainers = "2.0.2"
-kotlinLogging = "7.0.4"
+kotlinLogging = "7.0.7"
 
 [libraries]
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
